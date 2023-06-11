@@ -2,7 +2,7 @@
   "name": "antagningsoddset",
   "source": "src/index.tsx",
   "scripts": {
-    "start": "parcel ./src/index.html --open 'google chrome'",
+    "start": "parcel ./src/index.html",
     "build": "parcel build"
   },
   "devDependencies": {
