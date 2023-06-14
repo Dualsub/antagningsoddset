@@ -8,6 +8,7 @@ interface FooterProps {
 const Footer = ({ className }: FooterProps) => {
   return (
     <div className={"flex flex-col justify-center items-center mb-8 " + className}>
+      <GitHubLink className="flex md:hidden mb-6" />
       <p className="text-gray-500 text-xs">
         &copy; 2023 Simon Sjöling.
       </p>

@@ -75,21 +75,25 @@ export const App = () => {
   return <div className="bg-white">
     <div className="w-full mx-auto flex flex-col justify-start items-center min-h-screen">
       <div className="w-full flex flex-col justify-center">
-        <div className="h-48 w-full bg-green-400 flex flex-col items-end">
-          <GitHubLink className="mt-8 mr-16" />
+        <div className="w-full bg-green-400 flex flex-col items-center justify-center">
+          <div className="w-full flex flex-col items-end">
+            <GitHubLink className="mt-8 mr-16 md:flex hidden" />
+          </div>
+          <div className="flex flex-col justify-center items-center mb-12 mt-2">
+            <h1 className="text-5xl font-bold flex flex-row"><h1 className="mr-4">🎲</h1><h1 className="">Antagningsoddset</h1></h1>
+            <p className="mt-6">Skriv in dina meriter och få reda på dina chanser att bli antagen till din drömutbildning.</p>
+          </div>
         </div>
         <Wave fill="#4ADE80" />
       </div>
-      <section className="flex flex-col justify-start items-center w-full px-8 pb-0 mt-[-20rem]">
-        <h1 className="text-5xl font-bold mt-12 flex flex-row"><h1 className="mr-4">🎲</h1><h1 className="">Antagningsoddset</h1></h1>
-        <p className="mt-6 mb-12">Skriv in dina meriter och få reda på dina chanser att bli antagen till din drömutbildning.</p>
+      <section className="flex flex-col justify-start items-center w-full px-8 pb-0 mt-[-8.125rem]">
         <SearchBar
           programs={["Elektroteknik", "Farkostteknik"]}
           program={program}
           setProgram={setProgram}
           grades={grades}
           setGrades={setGrades}
-          className="mt-4 mb-6 max-w-4xl w-full"
+          className="mt-0 mb-6 max-w-4xl w-full"
         />
       </section>
       <section className="flex flex-col justify-center items-center max-w-7xl w-full px-8 mt-6 mb-36">
