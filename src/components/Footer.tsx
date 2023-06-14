@@ -1,8 +1,13 @@
-import GithubLogo from '../../assets/github-mark.svg';
+import { GitHub } from '@mui/icons-material';
+import { GitHubLink } from './GithubLink';
 
-const Footer = () => {
+interface FooterProps {
+  className?: string;
+}
+
+const Footer = ({ className }: FooterProps) => {
   return (
-    <div className="flex flex-col mt-auto mb-8">
+    <div className={"flex flex-col justify-center items-center mb-8 " + className}>
       <p className="text-gray-500 text-xs">
         &copy; 2023 Simon Sjöling.
       </p>

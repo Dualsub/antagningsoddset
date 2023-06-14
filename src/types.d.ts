@@ -38,3 +38,14 @@ export interface ECDFs {
     bii: ECDF;
     hp: ECDF;
 }
+
+export interface SearchState {
+    query: string;
+    results: Array<String>;
+    selected: string | null;
+}
+
+export interface SearchResult {
+    program: string;
+    university: string;
+}
