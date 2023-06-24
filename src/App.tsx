@@ -11,6 +11,7 @@ import programs from "../data/data.json";
 import { GitHubLink } from "./components/GithubLink";
 import { ProgramInfo } from "./components/ProgramInfo";
 import { AnimatedDice } from "./components/AnimatedDice";
+import { StatisticsPlot } from "./components/StatisticsPlot";
 
 const mockGrades = {
   bi: 20,
@@ -60,12 +61,16 @@ export const App = () => {
         <h1 className="text-2xl font-bold animate-spin ease-in-out">🎲</h1>
       </div>
     } else if (program !== "" && result !== null) {
-      return <div className="flex flex-col justify-center items-center">
-        <h2 className="mb-4 text-3xl font-bold">{program}</h2>
-        {programMeta && <h3 className="mb-4 text-xl font-bold">{programMeta.university}</h3>}
-        <ProbabilityDisplay probability={result} className="mb-4" />
-        <p>Du har goda chanser att bli antagen till {programMeta.name} vid {programMeta.university}.</p>
-        <ProgramInfo program={programMeta} />
+      return <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col justify-center items-center text-center">
+          <h2 className="mb-4 text-3xl font-bold">{program}</h2>
+          {programMeta && <h3 className="mb-4 text-xl font-bold">{programMeta.university}</h3>}
+          <ProbabilityDisplay probability={result} className="mb-4" />
+          <p>Du har goda chanser att bli antagen till {programMeta.name} vid {programMeta.university}.</p>
+        </div>
+        <div className="mt-4 w-full">
+          <StatisticsPlot statistics={programMeta.statistics} />
+        </div>
       </div>;
     } else {
       return <>

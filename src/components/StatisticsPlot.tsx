@@ -30,7 +30,6 @@ export const options = {
         mode: 'index' as const,
         intersect: false,
     },
-    stacked: false,
     plugins: {
         title: {
             display: false,
@@ -114,7 +113,7 @@ export const StatisticsPlot = ({ statistics }: StatisticsPlotProps) => {
     return data ? <div className="px-8 py-6 border-[1px] rounded-xl mt-8 w-full flex flex-col justify-start">
         <div className="flex flex-col w-full">
             <h3 className="text-lg font-semibold">Betygsstatistik</h3>
-            <Line options={options} data={data} />
+            <Line options={options} data={data} className="w-full" />
         </div>
     </div > : null;
 }
