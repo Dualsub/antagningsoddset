@@ -46,6 +46,7 @@ export interface SearchState {
 }
 
 export interface SearchResult {
-    program: string;
+    programKey: string;
+    programName: string;
     university: string;
 }

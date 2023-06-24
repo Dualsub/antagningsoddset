@@ -14,7 +14,7 @@ interface SearchResultsProps {
   query: string;
   inputRef: React.RefObject<HTMLInputElement>;
   open: boolean;
-  onSelected: (program: string) => void;
+  onSelected: (programKey: string, programName) => void;
 }
 
 export const SearchResults = ({ query, inputRef, open, onSelected }: SearchResultsProps) => {
@@ -46,17 +46,17 @@ export const SearchResults = ({ query, inputRef, open, onSelected }: SearchResul
       style={{ zIndex: 1000, width: inputRef.current?.offsetWidth }}
       open={open}
       className="flex flex-col justify-center align-middle items-center text-sm border-[1px] border-t-0 rounded-lg bg-white">
-      {results.map(({ program, university }) => (<>
+      {results.map(({ programKey, programName, university }) => (<>
         <button
           className="w-full focus:outline-none flex flex-row items-center justify-between border-b-[1px] last:border-none px-4 py-2"
           onClick={() => {
-            onSelected(program);
+            onSelected(programKey, programName);
           }}
           type="button"
-          key={program}
+          key={programKey}
         >
           <div className="flex flex-row justify-start text-left w-full">
-            <p>{program}</p>
+            <p>{programName}</p>
             <p className="text-gray-400 ml-2">{university}</p>
           </div>
           <ArrowForwardIosRounded style={{ width: "0.8rem", height: "0.8rem" }} />

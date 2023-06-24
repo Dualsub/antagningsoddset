@@ -9,6 +9,8 @@ import gradeInfo from "./gradeInfo";
 import { ProbabilityDisplay } from "./components/ProbabilityDisplay";
 import programs from "../data/data.json";
 import { GitHubLink } from "./components/GithubLink";
+import { ProgramInfo } from "./components/ProgramInfo";
+import { AnimatedDice } from "./components/AnimatedDice";
 
 const mockGrades = {
   bi: 20,
@@ -37,8 +39,6 @@ export const App = () => {
   const [program, setProgram] = useState<string>("");
   const [programMeta, setProgramMeta] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>("");
-  const [results, setResults] = useState<Array<String>>([]);
   const [result, setResult] = useState<number | null>(null);
 
   useEffect(() => {
@@ -64,7 +64,8 @@ export const App = () => {
         <h2 className="mb-4 text-3xl font-bold">{program}</h2>
         {programMeta && <h3 className="mb-4 text-xl font-bold">{programMeta.university}</h3>}
         <ProbabilityDisplay probability={result} className="mb-4" />
-        <p>Du har goda chanser att bli antagen till {program} vid {programMeta.university}.</p>
+        <p>Du har goda chanser att bli antagen till {programMeta.name} vid {programMeta.university}.</p>
+        <ProgramInfo program={programMeta} />
       </div>;
     } else {
       return <>
@@ -80,7 +81,10 @@ export const App = () => {
             <GitHubLink className="mt-8 mr-16 md:flex hidden" />
           </div>
           <div className="flex flex-col justify-center items-center mb-12 mt-2">
-            <h1 className="text-5xl font-bold flex flex-row"><h1 className="mr-4">🎲</h1><h1 className="">Antagningsoddset</h1></h1>
+            <h1 className="text-5xl font-bold flex flex-row">
+              <AnimatedDice className="mr-4" />
+              <h1 className="">Antagningsoddset</h1>
+            </h1>
             <p className="mt-6">Skriv in dina meriter och få reda på dina chanser att bli antagen till din drömutbildning.</p>
           </div>
         </div>
@@ -88,7 +92,6 @@ export const App = () => {
       </div>
       <section className="flex flex-col justify-start items-center w-full px-8 pb-0 mt-[-8.125rem]">
         <SearchBar
-          programs={["Elektroteknik", "Farkostteknik"]}
           program={program}
           setProgram={setProgram}
           grades={grades}

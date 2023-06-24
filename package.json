@@ -27,7 +27,10 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.4",
     "@react-spring/web": "^9.7.2",
+    "chart.js": "^4.3.0",
+    "fuse.js": "^6.6.2",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-spring": "^9.7.1"
   }

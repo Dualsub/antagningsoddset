@@ -13,7 +13,6 @@ interface SearchBarProps {
   setGrades: (grades: Grades) => void;
   program: string;
   setProgram: (program: string) => void;
-  programs: Array<string>;
   className?: string;
 }
 
@@ -64,9 +63,9 @@ export const SearchBar = ({ grades, setGrades, setProgram, className }: SearchBa
             inputRef={inputRef}
             query={query}
             open={open}
-            onSelected={(program) => {
-              setQuery(program);
-              setProgram(program);
+            onSelected={(programKey, programName) => {
+              setQuery(programName);
+              setProgram(programKey);
               setOpen(false);
             }}
           />
