@@ -12,6 +12,7 @@ import { GitHubLink } from "./components/GithubLink";
 import { ProgramInfo } from "./components/ProgramInfo";
 import { AnimatedDice } from "./components/AnimatedDice";
 import { StatisticsPlot } from "./components/StatisticsPlot";
+import { PopularTable } from "./components/PopularTable";
 
 const mockGrades = {
   bi: 20,
@@ -41,6 +42,7 @@ export const App = () => {
   const [programMeta, setProgramMeta] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<number | null>(null);
+  const [possibleResult, setPossibleResult] = useState<number | null>(null);
 
   useEffect(() => {
     console.log(program, grades);
@@ -51,8 +53,14 @@ export const App = () => {
 
     const stats = getLatestStatistics(program);
     console.log(stats);
-    const val = gradeInfo.some(grade => grades[grade.key] !== null) ? calculateProbability(grades, stats) : null;
+    const gradesAreValid = gradeInfo.some(grade => grades[grade.key] !== null);
+    const val = gradesAreValid ? calculateProbability(grades, stats) : null;
     setResult(val);
+
+    if (!!!grades.bii) {
+      setPossibleResult(gradesAreValid ? calculateProbability({ bi: grades.bi, bii: grades.bi, hp: grades.hp }, stats) : null);
+    }
+
   }, [program, grades]);
 
   const renderContent = () => {
@@ -67,6 +75,7 @@ export const App = () => {
           {programMeta && <h3 className="mb-4 text-xl font-bold">{programMeta.university}</h3>}
           <ProbabilityDisplay probability={result} className="mb-4" />
           <p>Du har goda chanser att bli antagen till {programMeta.name} vid {programMeta.university}.</p>
+          {possibleResult && possibleResult > 0.7 ? <p>Om du kompletterar ett gymnasiebetyg kan du öka till chanser till {Math.round(possibleResult * 100)}%! 👀</p> : null}
         </div>
         <div className="mt-4 w-full">
           <StatisticsPlot statistics={programMeta.statistics} />
@@ -74,19 +83,22 @@ export const App = () => {
       </div>;
     } else {
       return <>
+        <div className="w-full flex justify-center">
+          <PopularTable setLoading={setLoading} setProgram={setProgram} />
+        </div>
       </>
     }
   };
 
-  return <div className="bg-white">
-    <div className="w-full mx-auto flex flex-col justify-start items-center min-h-screen">
+  return <div className="bg-white w-full flex justify-center items-center">
+    <div className="w-full flex flex-col justify-start items-center min-h-screen">
       <div className="w-full flex flex-col justify-center">
         <div className="w-full bg-green-400 flex flex-col items-center justify-center">
           <div className="w-full flex flex-col items-end">
             <GitHubLink className="mt-8 mr-16 md:flex hidden" />
           </div>
           <div className="flex flex-col justify-center items-center mb-12 mt-2">
-            <h1 className="text-5xl font-bold flex flex-row">
+            <h1 className="text-4xl md:text-5xl font-bold flex flex-row">
               <AnimatedDice className="mr-4" />
               <h1 className="">Antagningsoddset</h1>
             </h1>
@@ -95,19 +107,19 @@ export const App = () => {
         </div>
         <Wave fill="#4ADE80" />
       </div>
-      <section className="flex flex-col justify-start items-center w-full px-8 pb-0 mt-[-8.125rem]">
+      <section className="flex flex-col justify-start items-center px-8 pb-0 mt-[-10.75%] max-w-4xl w-full">
         <SearchBar
           program={program}
           setProgram={setProgram}
           grades={grades}
           setGrades={setGrades}
-          className="mt-0 mb-6 max-w-4xl w-full"
+          className="mt-0 mb-6 w-full"
         />
       </section>
       <section className="flex flex-col justify-center items-center max-w-7xl w-full px-8 mt-6 mb-36">
         {renderContent()}
       </section>
-      <Footer className="mt-auto" />
+      <Footer className="mt-auto" showDisclamer={result !== null} />
     </div>
   </div>;
 };
