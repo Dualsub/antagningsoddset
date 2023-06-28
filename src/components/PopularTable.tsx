@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { AnnualAddmissionStats, Grades, Program } from "../types";
 import programs from "../../data/data.json";
 import gradeInfo from "../gradeInfo";
@@ -31,10 +31,6 @@ const COLUMNS = [
     key: "applicants",
     name: "Sökande",
   },
-  {
-    key: "admitted",
-    name: "Antagna",
-  },
   ...gradeInfo.map(grade => ({
     name: grade.name,
     key: grade.key,
@@ -54,7 +50,8 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
       setPopularPrograms((Object.values(programs) as Array<Program>).sort((a, b) => {
         const sa = a.statistics.find(s => s.year === YEAR);
         const sb = b.statistics.find(s => s.year === YEAR);
-        if (sa && sb) return sb.applicants - sa.applicants;
+        const biFactor = 700;
+        if (sa && sb) return (sb.applicants + biFactor * sb.bi) - (sa.applicants + biFactor * sa.bi);
         if (!sa && sb) return 1;
         if (!sb && sa) return -1;
 
@@ -73,21 +70,26 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
 
   return <>
     <div className="w-full flex justify-center flex-col items-center">
-      <h3 className="font-semibold text-xl mb-4">Mest populära program {YEAR}</h3>
-      <div className="border-[1px] rounded-xl overflow-hidden">
-        <table className="table-auto">
-          <thead className="font-semibol bg-green-500">
-            {COLUMNS.map(c => <th className="pl-6 last:px-6 pt-6 pb-4 first:text-left">{c.name}</th>)}
+      <h3 className="font-bold text-2xl mb-8">Mest populära ubildningarna {YEAR}</h3>
+
+      <div className="overflow-x-auto rounded-xl border-[1px]">
+        <table className="w-full text-sm text-left text-gray-600">
+          <thead className="text-xs text-gray-700 uppercase font-bold bg-white">
+            <tr className="border-b">
+              {COLUMNS.map(c => <th scope="col" className="px-6 py-3">{c.name}</th>)}
+            </tr>
           </thead>
           <tbody>
             {popularPrograms.map(p => <>
-              <tr key={p.program} className="border-t-[1px]">
+              <tr
+                key={p.program}
+                className="bg-white border-b last:border-none hover:bg-gray-50 whitespace-nowrap"
+                onClick={() => {
+                  setProgram(p.program);
+                }}
+              >
                 {COLUMNS.map(c => <>
-                  <td className="pl-6 py-2 last:px-6" key={p.program + "-" + c.key} onClick={() => {
-                    if (c.key === "program") {
-                      setProgram(p.program);
-                    }
-                  }}>{p[c.key] || null}</td >
+                  <td className="px-6 py-4 first:font-medium first:text-gray-900" key={p.program + "-" + c.key}>{p[c.key] || null}</td >
                 </>)}
               </tr >
             </>)}
@@ -95,5 +97,5 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
         </table>
       </div>
     </div >
-  </>
-}
+  </>;
+};
