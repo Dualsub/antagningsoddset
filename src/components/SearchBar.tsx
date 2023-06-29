@@ -26,6 +26,7 @@ export const SearchBar = ({ grades, setGrades, setProgram, className, program }:
 
   useEffect(() => {
     if (program !== "") {
+      console.log(program, programs[program])
       setQuery(programs[program].name);
     }
   }, [program]);

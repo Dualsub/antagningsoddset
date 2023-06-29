@@ -9,6 +9,7 @@ interface PopularTableProps {
 }
 
 type PopularTableRow = {
+  programKey: string;
   program: string;
   university: string;
 } & AnnualAddmissionStats;
@@ -47,7 +48,7 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
   useEffect(() => {
     setLoading(true);
     const getPopular = async () => {
-      setPopularPrograms((Object.values(programs) as Array<Program>).sort((a, b) => {
+      setPopularPrograms((Object.entries(programs) as Array<[string, Program]>).sort(([, a], [, b]) => {
         const sa = a.statistics.find(s => s.year === YEAR);
         const sb = b.statistics.find(s => s.year === YEAR);
         const biFactor = 700;
@@ -56,7 +57,8 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
         if (!sb && sa) return -1;
 
         return 0;
-      }).slice(0, NUM_PROGRAMS).map(p => ({
+      }).slice(0, NUM_PROGRAMS).map(([pKey, p]) => ({
+        programKey: pKey,
         program: p.name,
         university: p.university,
         ...p.statistics.find(s => s.year === YEAR)
@@ -85,7 +87,7 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
                 key={p.program}
                 className="bg-white border-b last:border-none hover:bg-gray-50 whitespace-nowrap"
                 onClick={() => {
-                  setProgram(p.program);
+                  setProgram(p.programKey);
                 }}
               >
                 {COLUMNS.map(c => <>
