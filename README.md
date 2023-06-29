@@ -4,8 +4,5 @@ En hemsida som beräknar ens chans att bli antagen till en universitetsutbildnin
 
 # TODO ✅
 
-- [ ] Visa gammal statistik.
-- [ ] Bättre sök.
+- [ ] Fix better data.
 
-# Ideer 💭
-- [ ] Tipsa om BII.
