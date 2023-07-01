@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnnualAddmissionStats, Grades, Program } from "../types";
+import { AnnualAddmissionStats, Program } from "../types";
 import programs from "../../data/data.json";
 import gradeInfo from "../gradeInfo";
 
@@ -17,24 +17,29 @@ type PopularTableRow = {
 interface Column {
   key: string;
   name: string;
+  className: string;
 }
 
 const COLUMNS = [
   {
     key: "program",
-    name: "Utbildning"
+    name: "Utbildning",
+    className: ""
   },
   {
     key: "university",
-    name: "Universitet"
+    name: "Universitet",
+    className: "hidden md:table-cell",
   },
   {
     key: "applicants",
     name: "Sökande",
+    className: ""
   },
   ...gradeInfo.map(grade => ({
     name: grade.name,
     key: grade.key,
+    className: grade.key === "bi" ? "hidden sm:table-cell" : "hidden lg:table-cell"
   })),
 ] as Array<Column>;
 
@@ -72,26 +77,31 @@ export const PopularTable = ({ setLoading, setProgram }: PopularTableProps) => {
 
   return <>
     <div className="w-full flex justify-center flex-col items-center">
-      <h3 className="font-bold text-2xl mb-8">Mest populära ubildningarna {YEAR}</h3>
-
-      <div className="overflow-x-auto rounded-xl border-[1px]">
-        <table className="w-full text-sm text-left text-gray-600">
+      <h3 className="font-bold text-2xl mb-8 text-center">Mest populära ubildningarna {YEAR}</h3>
+      <div className="overflow-x-auto rounded-xl border-[1px] w-full">
+        <table className="w-full text-sm text-left text-gray-600 table-auto">
           <thead className="text-xs text-gray-700 uppercase font-bold bg-white">
             <tr className="border-b">
-              {COLUMNS.map(c => <th scope="col" className="px-6 py-3">{c.name}</th>)}
+              {COLUMNS.map(c => <th key={c.key} scope="col" className={"px-6 py-3 " + c.className}>{c.name}</th>)}
             </tr>
           </thead>
           <tbody>
             {popularPrograms.map(p => <>
               <tr
                 key={p.program}
-                className="bg-white border-b last:border-none hover:bg-gray-50 whitespace-nowrap"
+                className="bg-white border-b last:border-none hover:bg-gray-50"
                 onClick={() => {
                   setProgram(p.programKey);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               >
                 {COLUMNS.map(c => <>
-                  <td className="px-6 py-4 first:font-medium first:text-gray-900" key={p.program + "-" + c.key}>{p[c.key] || null}</td >
+                  <td
+                    className={"px-6 py-4 first:font-medium first:text-gray-900 " + c.className}
+                    key={p.program + "-" + c.key}
+                  >
+                    {p[c.key] || null}
+                  </td >
                 </>)}
               </tr >
             </>)}

@@ -81,6 +81,7 @@ export const SearchBar = ({ grades, setGrades, setProgram, className, program }:
               {gradesInfo.map((grade) => (
                 <>
                   <input
+                    key={grade.key}
                     className="w-full px-2 last:border-r-0 border-r focus:outline-none"
                     type="text"
                     id={grade.key}

@@ -1,5 +1,5 @@
 import { AnnualAddmissionStats, Grades } from "../types";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -90,6 +90,15 @@ export const StatisticsPlot = ({ statistics, grades }: StatisticsPlotProps) => {
 
     const [data, setData] = useState<ChartData | null>(null);
     const [chartType, setChartType] = useState<ChartType>("all");
+    const [matches, setMatches] = useState(
+        window.matchMedia("(min-width: 768px)").matches
+    )
+
+    useEffect(() => {
+        window
+            .matchMedia("(min-width: 768px)")
+            .addEventListener('change', e => setMatches(e.matches));
+    }, []);
 
     useEffect(() => {
 
@@ -104,7 +113,7 @@ export const StatisticsPlot = ({ statistics, grades }: StatisticsPlotProps) => {
             label: grade.name,
             data: labels.map(l => {
                 const s = statistics.find(s => s.year === l);
-                return s ? s[grade.key] : null;
+                return (s && s[grade.key] >= grade.min && s[grade.key] <= grade.max) ? s[grade.key] : null;
             }),
             yAxisID: grade.key !== "hp" ? "grades" : "hp",
             spanGaps: true,
@@ -130,18 +139,20 @@ export const StatisticsPlot = ({ statistics, grades }: StatisticsPlotProps) => {
     }, [statistics, chartType, grades]);
 
     return data ? <>
-        <div className="px-8 py-6 border-[1px] rounded-xl mt-8 w-full flex flex-col justify-start">
+        <div className="px-6 py-4 sm:px-8 sm:py-6 border-[1px] rounded-xl mt-8 w-full flex flex-col justify-start">
             <div className="flex flex-col w-full">
                 <div className="flex flex-row justify-between w-full">
                     <h3 className="text-lg font-semibold">Betygsstatistik</h3>
-                    <select defaultValue="all" className="text-sm font-semibold" onChange={e => setChartType(e.target.value as ChartType)}>
+                    <select defaultValue="all" className="text-sm font-semibold hidden sm:block" onChange={e => setChartType(e.target.value as ChartType)}>
                         <option value="all">Alla</option>
                         <option value="bi">BI</option>
                         <option value="bii">BII</option>
                         <option value="hp">HP</option>
                     </select>
                 </div>
-                <Line options={options} data={data} className="w-full" />
+                <div className="h-64 md:h-fit">
+                    <Line options={{ ...options, maintainAspectRatio: matches ? true : false }} data={data} className="w-full" />
+                </div>
             </div>
         </div >
     </> : null;

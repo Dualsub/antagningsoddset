@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import ReactGA from 'react-ga4';
 
-const TRACKING_ID = "G-PVS3GCJ21G"; // OUR_TRACKING_ID
+const TRACKING_ID = process.env.REACT_APP_GA_ID;
 ReactGA.initialize(TRACKING_ID);
 
 const container = document.getElementById("app");
