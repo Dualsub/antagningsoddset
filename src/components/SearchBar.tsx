@@ -1,8 +1,9 @@
 import { GradeInfo, Grades } from "../types";
 import gradesInfo from "../gradeInfo";
+import programs from "../../data/data.json"
 
 import SearchIcon from '@mui/icons-material/Search';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SearchResults } from "./SearchResults";
 import { HelpOutline } from "@mui/icons-material";
 import gradeInfo from "../gradeInfo";
@@ -16,12 +17,19 @@ interface SearchBarProps {
   className?: string;
 }
 
-export const SearchBar = ({ grades, setGrades, setProgram, className }: SearchBarProps) => {
+export const SearchBar = ({ grades, setGrades, setProgram, className, program }: SearchBarProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [displayedGrades, setDisplayedGrades] = useState<Grades>({ ...grades });
+
+  useEffect(() => {
+    if (program !== "") {
+      console.log(program, programs[program])
+      setQuery(programs[program].name);
+    }
+  }, [program]);
 
   const updateGrades = () => {
     const newGrades = gradeInfo.reduce((gradesAcc: Grades, gradeType: GradeInfo) => {
@@ -63,8 +71,7 @@ export const SearchBar = ({ grades, setGrades, setProgram, className }: SearchBa
             inputRef={inputRef}
             query={query}
             open={open}
-            onSelected={(programKey, programName) => {
-              setQuery(programName);
+            onSelected={(programKey, _) => {
               setProgram(programKey);
               setOpen(false);
             }}
@@ -74,6 +81,7 @@ export const SearchBar = ({ grades, setGrades, setProgram, className }: SearchBa
               {gradesInfo.map((grade) => (
                 <>
                   <input
+                    key={grade.key}
                     className="w-full px-2 last:border-r-0 border-r focus:outline-none"
                     type="text"
                     id={grade.key}
@@ -82,7 +90,7 @@ export const SearchBar = ({ grades, setGrades, setProgram, className }: SearchBa
                     onChange={(e) => {
                       setDisplayedGrades({ ...displayedGrades, [grade.key]: e.target.value });
                     }}
-                    onBlur={(e) => updateGrades()}
+                    onBlur={() => updateGrades()}
                   />
                 </>
               ))}
